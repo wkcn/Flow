@@ -20,12 +20,12 @@ n8.oy = 30
 
 n3.redgreen = True
 
-e1 = GetEdge(n1, n3, length = 500, c = 1800, t = 28.6)
-e3 = GetEdge(n3, n4, length = 500, c = 1800, t = 28.6)
+e1 = GetEdge(n1, n3, length = 1000, c = 1650, t = 36.0)
+e3 = GetEdge(n3, n4, length = 1000, c = 1650, t = 36.0)
 
 
-e6 = GetEdge(n3, n8, length = 500, c = 1800, t = 28.6)
-e7 = GetEdge(n3, n7, length = 500, c = 1800, t = 28.6)
+e6 = GetEdge(n3, n8, length = 1000, c = 1650, t = 36.0)
+e7 = GetEdge(n3, n7, length = 1000, c = 1650, t = 36.0)
 
 Flow.endpoints = [n1, n4, n7, n8]
 

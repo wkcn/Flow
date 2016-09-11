@@ -2,9 +2,9 @@
 from math import *
 class Edge:
     g = 42.0
-    C = 70.0
+    C = 90.0
     T = 15 / 60.0
-    K = 1.0
+    K = 0.5
     I = 1.0
     def __init__(self,length, j1, j2, c, t):
         self.length = length * 1.0
@@ -14,16 +14,18 @@ class Edge:
         self.Q = .0
         self.emp = False
         self.ita = 1.0
+        self.blocked = True
     def GetWeight(self, redgreen):
         beta = 2.076 + 2.87 * (self.Q / (self.ita * self.c) ** 3)
         t1 = self.t * (1 + self.Q / ((self.ita * self.c) ** beta))
         d1 = (0.5 * self.C * (1.0 - self.g / self.C) ** 2) / (1.0 - min(1.0, self.Q / self.c) * self.g / self.C)
         d2 = 900.0 * self.T * (self.Q / self.c - 1 + sqrt((self.Q/self.c - 1) ** 2 + 8 * self.K * self.I * (self.Q/self.c) / (self.c * self.T)))
         d3 = 5.0
-        if redgreen:
-            t1 += d1 + d2 + d3
-        else:
-            t1 += d2 + d3
+        if self.blocked:
+            if redgreen:
+                t1 += d1 + d2 + d3
+            else:
+                t1 += d2 + d3
         return t1
 
 class EmptyEdge:
