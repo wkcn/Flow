@@ -10,8 +10,9 @@ import data1
 import data2
 import data3
 import data4
+import data5
 
-datas = [data1, data2, data3, data4]
+datas = [data1, data2, data3, data4, data5]
 
 Qs = data1.Qs
 Es = data1.Es 
@@ -115,12 +116,19 @@ class MainWindow(QMainWindow):
                 e.Q = 0
         self.iterNum = 0
 
+    def PrintResult(self):
+        for y in Qs:
+            y.PrintResult(Qs)
+
+
     def FinishSim(self):
         while self.iterNum < self.needIterNum:
             for q in Qs:
                 q.update(self.needIterNum)
             self.iterNum += 1
         self.update()
+        print("\n\n")
+        self.PrintResult()
 
     def paintEvent(self, e):
         qp = QPainter()
