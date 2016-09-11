@@ -34,7 +34,7 @@ class MainWindow(QMainWindow):
         self.labels = [QLabel(self) for _ in range(len(Qs) * 2)]
         ox = 550
         oy = 50
-        u = 40
+        u = 50
         aIntValidator = QIntValidator()
         aIntValidator.setRange(0, 99999)
         self.editBoxs = [[None for _ in range(len(Qs))] for _ in range(len(Qs))]
@@ -136,6 +136,7 @@ class MainWindow(QMainWindow):
 
         for es in Es:
             u = 0
+            texts = []
             for e in es:
                 if e.weight:
                     j1, j2 = e.joints
@@ -155,13 +156,17 @@ class MainWindow(QMainWindow):
                     else:
                         c = '^'
                         x += 13
-                    pen = QPen(color, 6 , Qt.SolidLine)
-                    qp.setPen(pen)
                     if self.Qviewed:
                         text = str(c) + " %d" % e.Q 
                     else:
                         text = str(c) + " %.2f" % e.weight
-                    qp.drawText(x - 30, y - 2 + u * 18, text)
+                    texts.append((text, color))
                     u += 1
+            u = 0
+            for text, color in sorted(texts, key = lambda r:r[0]): 
+                pen = QPen(color, 6 , Qt.SolidLine)
+                qp.setPen(pen)
+                qp.drawText(x - 28, y - 2 + u * 18, text)
+                u += 1
         qp.end()
 

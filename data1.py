@@ -28,7 +28,8 @@ e6 = GetEmptyEdge(n3, n6)
 Flow.endpoints = [n4]
 
 Q1 = Flow(1000, n1) 
+Q2 = Flow(0, n4) 
 
-Qs = [Q1]
+Qs = [Q1, Q2]
 Es = [e1, e2, e3, e4, e5, e6]
 Ns = [n1, n2, n3, n4, n5, n6]
