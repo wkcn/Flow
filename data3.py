@@ -4,49 +4,36 @@ from Edge import *
 from Flow import *
 
 ox = 200
-oy = 200
-ratio = 70
+oy = 220
+ratio = 90
 
 def AddNode(x, y):
     nd = Node(ox + x * ratio, oy + y * ratio)
     return nd
 
-n1 = AddNode(-1, -1)
-n2 = AddNode(0, -1)
-n3 = AddNode(1, -1)
+n1 = AddNode(-2, 0)
+n3 = AddNode(0, 0)
+n4 = AddNode(2, 0)
+n7 = AddNode(0, -2)
+n8 = AddNode(0, 2)
+n8.oy = 30
 
-n5 = AddNode(1, 1)
-n6 = AddNode(0, 1)
-n7 = AddNode(-1, 1)
+n3.redgreen = True
 
-n10 = AddNode(-2, -1)
-n11 = AddNode(2, -1)
-n12 = AddNode(2, 1)
-n13 = AddNode(-2, 1)
-
-Ns = [n1,n2,n3,n5,n6,n7,n10,n11,n12, n13]
+e1 = GetEdge(n1, n3, length = 500, c = 1800, t = 28.6)
+e3 = GetEdge(n3, n4, length = 500, c = 1800, t = 28.6)
 
 
-e1 = GetEdge(n1, n2, length = 500, c = 900, t = 3)
-e2 = GetEdge(n2, n3, length = 500, c = 900, t = 3)
+e6 = GetEdge(n3, n8, length = 500, c = 1800, t = 28.6)
+e7 = GetEdge(n3, n7, length = 500, c = 1800, t = 28.6)
 
-e3 = GetEdge(n3, n5, length = 500, c = 900, t = 3)
+Flow.endpoints = [n1, n4, n7, n8]
 
-e4 = GetEdge(n5, n6, length = 500, c = 900, t = 3)
-e5 = GetEdge(n6, n7, length = 500, c = 900, t = 3)
+Q1 = Flow(1800, n1) 
+Q2 = Flow(1800, n4) 
+Q3 = Flow(1800, n7) 
+Q4 = Flow(1800, n8) 
 
-e6 = GetEdge(n7, n1, length = 500, c = 900, t = 3)
-
-e7 = GetEdge(n2, n6, length = 500, c = 900, t = 3)
-
-e8 = GetEdge(n10, n1, length = 500, c = 900, t = 3)
-e9 = GetEdge(n3, n11, length = 500, c = 900, t = 3)
-e10 = GetEdge(n5, n12, length = 500, c = 900, t = 3)
-e11 = GetEdge(n7, n13, length = 500, c = 900, t = 3)
-
-Es = [e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11]
-
-Flow.endpoints = [n10,n11,n12,n13]
-Qs = []
-for p in Flow.endpoints:
-    Qs.append(Flow(1000, p))
+Qs = [Q1, Q2, Q3, Q4]
+Es = [e1, e3, e6, e7]
+Ns = [n1, n3, n4, n7, n8]
