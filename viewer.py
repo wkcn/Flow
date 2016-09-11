@@ -8,8 +8,9 @@ from threading import *
 
 import data1
 import data2
+import data3
 
-datas = [data1, data2]
+datas = [data1, data2, data3]
 
 Qs = data1.Qs
 Es = data1.Es 
@@ -17,7 +18,7 @@ Ns = data1.Ns
 class MainWindow(QMainWindow):
     def __init__(self, i):
         super(MainWindow, self).__init__()
-        self.resize(500, 500)
+        self.resize(700, 500)
         self.setWindowTitle("Flow")
         self.Qviewed = True
         global Qs, Es, Ns
@@ -38,7 +39,7 @@ class MainWindow(QMainWindow):
         self.buttonEnd = QPushButton(self)
         self.buttonQViewed = QCheckBox(self)
         ox = 30
-        oy = 300
+        oy = 400
         u = 80
         for i in range(len(Qs)):
             self.editBoxs[i].move(ox + u * i, oy)
@@ -51,12 +52,13 @@ class MainWindow(QMainWindow):
             self.labels[i].setText("Q%d" % i)
         self.button.move(ox, oy + 30)
         self.button.setText("RestartSim")
-        self.buttonQViewed.move(ox + 320, oy + 60)
+        self.buttonQViewed.move(ox + 520, oy + 60)
         self.buttonQViewed.setText("View Time")
-        self.buttonEnd.move(ox + 320, oy + 30)
+        self.buttonEnd.move(ox + 520, oy + 30)
         self.buttonEnd.setText("Finish Sim")
         QObject.connect(self.button, SIGNAL("clicked()"),self.RestartSim) 
         QObject.connect(self.buttonEnd, SIGNAL("clicked()"),self.FinishSim) 
+        self.RestartSim()
 
 
     def on_timer(self):
@@ -113,20 +115,20 @@ class MainWindow(QMainWindow):
                     x = (j1.x + j2.x) / 2
                     y = (j1.y + j2.y) / 2
                     c = ''
+                    color = Qt.red
                     if j1.x < j2.x:
                         c = '->'
                     elif j1.x > j2.x:
                         c = '<-'
+                        color = Qt.blue
                     elif j1.y < j2.y:
                         c = 'v'
                         x += 13
+                        color = Qt.blue
                     else:
                         c = '^'
                         x += 13
-                    if u == 0:
-                        pen = QPen(Qt.red, 6 , Qt.SolidLine)
-                    else:
-                        pen = QPen(Qt.blue, 6 , Qt.SolidLine)
+                    pen = QPen(color, 6 , Qt.SolidLine)
                     qp.setPen(pen)
                     if self.Qviewed:
                         text = str(c) + " %d" % e.Q 
