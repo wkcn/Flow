@@ -44,7 +44,7 @@ class Flow:
                         if e.joints[0] == po and e.joints[1] == w:
                             if e and e not in vis:
                                 vis.append(e)
-                                ndis = dis + e.weight
+                                ndis = dis + e.GetWeight(w.redgreen)
                                 npo = w
                                 nelst = copy(elst)
                                 nelst.append(e)

@@ -138,7 +138,7 @@ class MainWindow(QMainWindow):
             u = 0
             texts = []
             for e in es:
-                if e.weight:
+                if not e.emp:
                     j1, j2 = e.joints
                     x = (j1.x + j2.x) / 2
                     y = (j1.y + j2.y) / 2
@@ -159,7 +159,7 @@ class MainWindow(QMainWindow):
                     if self.Qviewed:
                         text = str(c) + " %d" % e.Q 
                     else:
-                        text = str(c) + " %.2f" % e.weight
+                        text = str(c) + " %.2f" % e.GetWeight(j2.redgreen)
                     texts.append((text, color))
                     u += 1
             u = 0
