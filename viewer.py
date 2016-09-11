@@ -18,7 +18,7 @@ Ns = data1.Ns
 class MainWindow(QMainWindow):
     def __init__(self, i):
         super(MainWindow, self).__init__()
-        self.resize(700, 500)
+        self.resize(800, 500)
         self.setWindowTitle("Flow")
         self.Qviewed = True
         global Qs, Es, Ns
@@ -28,30 +28,47 @@ class MainWindow(QMainWindow):
 
         self.timer = QTimer()
         QObject.connect(self.timer,SIGNAL("timeout()"), self.on_timer)
-        fps = 60
-        self.timer.start(1000 / fps)
         self.iterNum = 0
         self.needIterNum = 1000;
 
-        self.labels = [QLabel(self) for _ in range(len(Qs))]
-        self.editBoxs = [QLineEdit(self) for _ in range(len(Qs))]
+        self.labels = [QLabel(self) for _ in range(len(Qs) * 2)]
+        ox = 550
+        oy = 50
+        u = 40
+        aIntValidator = QIntValidator()
+        aIntValidator.setRange(0, 99999)
+        self.editBoxs = [[None for _ in range(len(Qs))] for _ in range(len(Qs))]
+        for r in range(len(Qs)):
+            for c in range(len(Qs)):
+                qe = QLineEdit(self)
+                qe.resize(u,u)
+                qe.move(ox + u * c, oy + u * r)
+                qe.setValidator(aIntValidator)
+                value = 0.0
+                #r->c
+                targets = Qs[r].targets 
+                for i in range(len(targets)):
+                    if targets[i] == Qs[c].startPoint:
+                        value = Qs[r].toValue[i]
+                        break
+
+                qe.setText("%d" % value)
+                self.editBoxs[r][c] = qe
+
         self.button = QPushButton(self)
         self.buttonEnd = QPushButton(self)
         self.buttonQViewed = QCheckBox(self)
+
+        self.button.move(ox, oy + len(Qs) * u + 30)
+        self.button.setText("RestartSim")
+
+        for i in range(len(Qs)):
+            self.labels[i*2].move(ox + u * i + 5, oy - 33)
+            self.labels[i*2+1].move(ox - 20, oy + u * i)
+            self.labels[i*2].setText("Q%d" % i)
+            self.labels[i*2+1].setText("Q%d" % i)
         ox = 30
         oy = 400
-        u = 80
-        for i in range(len(Qs)):
-            self.editBoxs[i].move(ox + u * i, oy)
-            self.editBoxs[i].resize(60, 25)
-            self.editBoxs[i].setText("%d" % Qs[i].value)
-            aIntValidator = QIntValidator()
-            aIntValidator.setRange(0, 99999)
-            self.editBoxs[i].setValidator(aIntValidator)
-            self.labels[i].move(ox + u * i + 5, oy - 36)
-            self.labels[i].setText("Q%d" % i)
-        self.button.move(ox, oy + 30)
-        self.button.setText("RestartSim")
         self.buttonQViewed.move(ox + 520, oy + 60)
         self.buttonQViewed.setText("View Time")
         self.buttonEnd.move(ox + 520, oy + 30)
@@ -59,6 +76,8 @@ class MainWindow(QMainWindow):
         QObject.connect(self.button, SIGNAL("clicked()"),self.RestartSim) 
         QObject.connect(self.buttonEnd, SIGNAL("clicked()"),self.FinishSim) 
         self.RestartSim()
+        fps = 60
+        self.timer.start(1000 / fps)
 
 
     def on_timer(self):
@@ -70,8 +89,16 @@ class MainWindow(QMainWindow):
         self.update()
 
     def RestartSim(self):
-        for i in range(len(Qs)):
-            Qs[i].value = int(self.editBoxs[i].text()) 
+
+        for r in range(len(Qs)):
+            for c in range(len(Qs)):
+                value = int(self.editBoxs[r][c].text())
+                targets = Qs[r].targets
+                for i in range(len(targets)):
+                    if targets[i] == Qs[c].startPoint:
+                        Qs[r].toValue[i] = value
+                        break
+
         for es in Es:
             for e in es:
                 e.Q = 0
@@ -134,7 +161,7 @@ class MainWindow(QMainWindow):
                         text = str(c) + " %d" % e.Q 
                     else:
                         text = str(c) + " %.2f" % e.weight
-                    qp.drawText(x - 10, y - 2 + u * 18, text)
+                    qp.drawText(x - 30, y - 2 + u * 18, text)
                     u += 1
         qp.end()
 

@@ -5,9 +5,12 @@ from copy import *
 class Flow:
     endpoints = []
     def __init__(self, value, startPoint):
-        self.value = value * 1.0
         self.startPoint = startPoint
         self.targets = self.GetTargets()
+        self.SetValue(value)
+    def SetValue(self, value):
+        self.value = value * 1.0
+        self.toValue = [self.value / len(self.targets) for _ in range(len(self.targets))] # 默认均分
     def GetTargets(self):
         res = []
         vis = [self.startPoint]
@@ -23,9 +26,9 @@ class Flow:
                     vis.append(w)
         return res
     def update(self, n):
-        y = self.value * 1.0 / n
-        y /= len(self.targets)
-        for t in self.targets:
+        for i in range(len(self.targets)):
+            t = self.targets[i]
+            y = self.toValue[i] * 1.0 / n
             #startPoint -> t
             q = PriorityQueue()
             vis = []
