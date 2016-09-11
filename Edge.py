@@ -10,6 +10,14 @@ class Edge:
     def weight(self):
         return self.t * (1 + self.Q / self.C)
 
+class EmptyEdge:
+    def __init__(self, j1, j2):
+        self.joints = [j1, j2]#j1 -> j2
+        self.Q = .0
+    @property
+    def weight(self):
+        return 0
+
 
 #n1 -> n2
 def GetEdgeSingle(n1, n2, length, C, t):
@@ -20,10 +28,27 @@ def GetEdgeSingle(n1, n2, length, C, t):
     #n2.edges.append(e)
     #if n1 not in n2.neighbors:
     #    n2.neighbors.append(n1)
-    return e
+    return [e]
 
 def GetEdge(n1, n2, length, C, t):
     e1 = GetEdgeSingle(n1, n2, length, C, t)
     e2 = GetEdgeSingle(n2, n1, length, C, t)
-    return [e1, e2]
+    return e1 + e2
+
+
+#n1 -> n2
+def GetEmptyEdgeSingle(n1, n2):
+    e = EmptyEdge(n1, n2)
+    n1.edges.append(e)
+    if n2 not in n1.neighbors:
+        n1.neighbors.append(n2)
+    #n2.edges.append(e)
+    #if n1 not in n2.neighbors:
+    #    n2.neighbors.append(n1)
+    return [e]
+
+def GetEmptyEdge(n1, n2):
+    e1 = GetEmptyEdgeSingle(n1, n2)
+    e2 = GetEmptyEdgeSingle(n2, n1)
+    return e1 + e2
 
