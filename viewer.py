@@ -79,6 +79,9 @@ class MainWindow(QMainWindow):
         fps = 60
         self.timer.start(1000 / fps)
 
+        self.redgreenTime = 0;
+        self.redgreenColor = Qt.green
+
 
     def on_timer(self):
         if self.iterNum < self.needIterNum:
@@ -86,6 +89,13 @@ class MainWindow(QMainWindow):
                 q.update(self.needIterNum)
             self.iterNum += 1
         self.Qviewed = (self.buttonQViewed.checkState() == 0)
+        self.redgreenTime += 1
+        if self.redgreenTime > 30:
+            self.redgreenTime = 0
+            if self.redgreenColor == Qt.green:
+                self.redgreenColor = Qt.red
+            else:
+                self.redgreenColor = Qt.green
         self.update()
 
     def RestartSim(self):
@@ -122,9 +132,12 @@ class MainWindow(QMainWindow):
                 j1, j2 = e.joints
                 qp.drawLine(j1.x, j1.y, j2.x, j2.y)
 
-        pen = QPen(Qt.blue, 6 , Qt.SolidLine)
-        qp.setPen(pen)
         for node in Ns:
+            if node.redgreen:
+                pen = QPen(self.redgreenColor, 6 , Qt.SolidLine)
+            else:
+                pen = QPen(Qt.blue, 6 , Qt.SolidLine)
+            qp.setPen(pen)
             qp.drawPoint(node.x, node.y)
 
         pen = QPen(Qt.black, 6 , Qt.SolidLine)
@@ -132,7 +145,7 @@ class MainWindow(QMainWindow):
         for i in range(len(Qs)):
             f = Qs[i]
             p = f.startPoint
-            qp.drawText(p.x - 8, p.y - 8, "Q%d" % i)
+            qp.drawText(p.x + p.ox - 8, p.y + p.oy - 8, "Q%d" % i)
 
         for es in Es:
             u = 0

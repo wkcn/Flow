@@ -1,23 +1,23 @@
 #coding=utf-8
 from math import *
 class Edge:
-    ita = 1.0
-    g = 28.0
-    C = 60.0
-    T = 15 * 60.0
+    g = 42.0
+    C = 70.0
+    T = 15 / 60.0
     K = 1.0
     I = 1.0
     def __init__(self,length, j1, j2, c, t):
-        self.length = length
+        self.length = length * 1.0
         self.joints = [j1, j2]#j1 -> j2
         self.c = c * 1.0
-        self.t = t * 1.0
+        self.t = t * 1.0 # t值 = self.length / 自由速度(没有其他车辆阻碍时的速度), 这里的t值已经预先计算出来
         self.Q = .0
         self.emp = False
+        self.ita = 1.0
     def GetWeight(self, redgreen):
-        beta = 2.076 + 2.87 * (self.Q / (Edge.ita * self.c) ** 3)
-        t1 = self.t * (1 + self.Q / ((Edge.ita * self.c) ** beta))
-        d1 = (0.5 * self.c * (1.0 - self.g / self.C) ** 2) / (1.0 - min(1.0, self.Q / self.c) * self.g / self.C)
+        beta = 2.076 + 2.87 * (self.Q / (self.ita * self.c) ** 3)
+        t1 = self.t * (1 + self.Q / ((self.ita * self.c) ** beta))
+        d1 = (0.5 * self.C * (1.0 - self.g / self.C) ** 2) / (1.0 - min(1.0, self.Q / self.c) * self.g / self.C)
         d2 = 900.0 * self.T * (self.Q / self.c - 1 + sqrt((self.Q/self.c - 1) ** 2 + 8 * self.K * self.I * (self.Q/self.c) / (self.c * self.T)))
         d3 = 5.0
         if redgreen:
